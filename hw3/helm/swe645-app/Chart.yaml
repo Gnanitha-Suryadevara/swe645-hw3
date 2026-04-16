@@ -1,0 +1,10 @@
+# Name: Gnanitha Suryadevara
+# Course: SWE 645 - HW3
+# Purpose: Helm chart definition for the SWE645 full-stack application
+
+apiVersion: v2
+name: swe645-app
+description: SWE645 Student Survey Full Stack Application
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

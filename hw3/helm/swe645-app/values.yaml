@@ -1,0 +1,18 @@
+# Name: Gnanitha Suryadevara
+# Course: SWE 645 - HW3
+# Purpose: Helm chart values for configuring the SWE645 application deployment
+
+frontend:
+  image: suryadevara/swe645-frontend
+  tag: latest
+  replicas: 3
+  port: 80
+
+backend:
+  image: suryadevara/swe645-backend
+  tag: latest
+  replicas: 3
+  port: 8000
+
+database:
+  url: "mysql+pymysql://admin:springswe645@swe645-db.cbvvtxsuqpjp.us-east-1.rds.amazonaws.com:3306/survey_db"

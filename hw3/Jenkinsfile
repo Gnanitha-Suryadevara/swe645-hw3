@@ -1,0 +1,74 @@
+// Name: Gnanitha Suryadevara
+// Course: SWE 645 - HW3
+// Purpose: Jenkins CI/CD pipeline for building and deploying full-stack app to Kubernetes
+
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_USERNAME = 'suryadevara'
+        FRONTEND_IMAGE = "${DOCKERHUB_USERNAME}/swe645-frontend"
+        BACKEND_IMAGE  = "${DOCKERHUB_USERNAME}/swe645-backend"
+        IMAGE_TAG = "latest"
+        DOCKERHUB_CREDENTIAL_ID = 'dockerhub-credentials'
+        KUBECONFIG_CREDENTIAL_ID = 'kubeconfig-credentials'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Checking out source code...'
+                checkout scm
+            }
+        }
+
+        stage('Build Frontend Image') {
+            steps {
+                echo 'Building React frontend Docker image...'
+                sh "docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} ./frontend"
+            }
+        }
+
+        stage('Build Backend Image') {
+            steps {
+                echo 'Building FastAPI backend Docker image...'
+                sh "docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} ./backend"
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: "${DOCKERHUB_CREDENTIAL_ID}",
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    sh "docker push ${FRONTEND_IMAGE}:${IMAGE_TAG}"
+                    sh "docker push ${BACKEND_IMAGE}:${IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes with Helm') {
+            steps {
+                withCredentials([file(
+                    credentialsId: "${KUBECONFIG_CREDENTIAL_ID}",
+                    variable: 'KUBECONFIG'
+                )]) {
+                    sh "helm upgrade --install swe645-app ./helm/swe645-app --values ./helm/swe645-app/values.yaml"
+                    sh "kubectl rollout restart deployment/frontend-deployment"
+                    sh "kubectl rollout restart deployment/backend-deployment"
+                    sh "kubectl rollout status deployment/frontend-deployment"
+                    sh "kubectl rollout status deployment/backend-deployment"
+                }
+            }
+        }
+    }
+
+    post {
+        success { echo 'HW3 Pipeline completed! Application deployed.' }
+        failure { echo 'Pipeline failed. Check logs above.' }
+    }
+}
