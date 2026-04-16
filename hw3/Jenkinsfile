@@ -26,14 +26,14 @@ pipeline {
         stage('Build Frontend Image') {
             steps {
                 echo 'Building React frontend Docker image...'
-                sh "docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} ./frontend"
+                sh "docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} ./hw3/frontend"
             }
         }
 
         stage('Build Backend Image') {
             steps {
                 echo 'Building FastAPI backend Docker image...'
-                sh "docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} ./backend"
+                sh "docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} ./hw3/backend"
             }
         }
 
@@ -57,7 +57,7 @@ pipeline {
                     credentialsId: "${KUBECONFIG_CREDENTIAL_ID}",
                     variable: 'KUBECONFIG'
                 )]) {
-                    sh "helm upgrade --install swe645-app ./helm/swe645-app --values ./helm/swe645-app/values.yaml"
+                    sh "helm upgrade --install swe645-app ./hw3/helm/swe645-app --values ./hw3/helm/swe645-app/values.yaml"
                     sh "kubectl rollout restart deployment/frontend-deployment"
                     sh "kubectl rollout restart deployment/backend-deployment"
                     sh "kubectl rollout status deployment/frontend-deployment"
