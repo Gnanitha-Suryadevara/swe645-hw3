@@ -1,6 +1,4 @@
-# Name: Gnanitha Suryadevara
-# Course: SWE 645 - HW3
-# Purpose: FastAPI backend with CRUD operations for student survey data
+# FastAPI backend with CRUD operations for student survey data
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware

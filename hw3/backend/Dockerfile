@@ -1,6 +1,4 @@
-# Name: Gnanitha Suryadevara
-# Course: SWE 645 - HW3
-# Purpose: Dockerfile for FastAPI backend service
+# Dockerfile for FastAPI backend service
 
 FROM python:3.11-slim
 

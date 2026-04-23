@@ -1,6 +1,4 @@
-// Name: Gnanitha Suryadevara
-// Course: SWE 645 - HW3
-// Purpose: Jenkins CI/CD pipeline for building and deploying full-stack app to Kubernetes
+// Jenkins CI/CD pipeline for building and deploying full-stack app to Kubernetes
 
 pipeline {
     agent any

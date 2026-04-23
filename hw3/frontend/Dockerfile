@@ -1,6 +1,4 @@
-# Name: Gnanitha Suryadevara
-# Course: SWE 645 - HW3
-# Purpose: Dockerfile for React frontend service
+# Dockerfile for React frontend service
 
 FROM node:20-alpine as build
 
@@ -8,6 +6,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+ARG REACT_APP_API_URL=http://35.153.217.201:8000
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
 RUN npm run build
 
 FROM nginx:alpine

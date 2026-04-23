@@ -1,6 +1,4 @@
-# Name: Gnanitha Suryadevara
-# Course: SWE 645 - HW3
-# Purpose: Helm chart values for configuring the SWE645 application deployment
+# Helm chart values for configuring the SWE645 application deployment
 
 frontend:
   image: suryadevara/swe645-frontend
